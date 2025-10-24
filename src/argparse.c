@@ -16,5 +16,9 @@ void print_help(char *exec_alias) {
   printf("\t%s <path/to/m3u/library> <replace string> <path/to/music/dir>",
          exec_alias);
 
-  // printf();
+  printf("ARGUMENTS:\n");
+  printf("\t<path/to/m3u/library>\t\tPath to m3u files to modify\n");
+  printf("\t<replace string>\t\tString to match prefix to replace\n");
+  printf("\t<path/to/music/dir>\t\tPath to directory where music files are "
+         "stored\n");
 }
