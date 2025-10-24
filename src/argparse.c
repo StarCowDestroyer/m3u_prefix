@@ -60,6 +60,22 @@ int get_m3u_files(char *m3u_path, char ***m3u_files_out, int *size_out) {
   return 1;
 }
 
-// args_t parse_args(int argc, char **argv){
-//
-// }
+args_t parse_args(int argc, char **argv) {
+  // defaults
+  args_t args = {
+      .m3u_path = NULL,
+      .music_path = NULL,
+      .replace_str = NULL,
+  };
+
+  if (argc != ARGS_EXPECTED_SIZE) {
+    print_help(argv[0]);
+    return args;
+  }
+
+  args.m3u_path = argv[1];
+  args.replace_str = argv[2];
+  args.music_path = argv[3];
+
+  return args;
+}
