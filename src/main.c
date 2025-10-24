@@ -21,9 +21,13 @@ int main(int argc, char *argv[]) {
   //        args.music_path);
   char **m3u_files = NULL;
   int size;
-  if (!get_m3u_files(argv[1], &m3u_files, &size)) {
+  if (!get_m3u_files(args.m3u_path, &m3u_files, &size)) {
     printf("ERROR\nfailed to read m3u files\n");
     return 1;
+  }
+  printf("M3U FILES:\n");
+  for (int i = 0; i < size; i++) {
+    printf("%s ", m3u_files[i]);
   }
 
   // replace_text(m3u_files, args.replace_str, args.music_path);
