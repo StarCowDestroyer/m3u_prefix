@@ -8,7 +8,7 @@
 
 void print_help(char *exec_alias) {
   printf("USAGE:\n");
-  printf("\t%s <path/to/m3u/library> <replace string> <path/to/music/dir>",
+  printf("\t%s <path/to/m3u/library> <replace string> <path/to/music/dir>\n",
          exec_alias);
 
   printf("ARGUMENTS:\n");
@@ -27,8 +27,9 @@ args_t parse_args(int argc, char **argv) {
   };
 
   if (argc != ARGS_EXPECTED_SIZE) {
+    printf("Invalid argument count.\n\n");
     print_help(argv[0]);
-    return args;
+    exit(1);
   }
 
   args.m3u_path = argv[1];
