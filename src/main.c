@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "../include/argparse.h"
+#include "../include/m3udirparse.h"
 
 int main(int argc, char *argv[]) {
   // char **m3u_files = NULL;
