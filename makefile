@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Wpedantic -std=c99 -Iinclude -D_GNU_SOURCE
+CFLAGS = -Wall -Wextra -Wpedantic -std=c99 -Iinclude -D_GNU_SOURCE -g
 LDFLAGS = -lm
 SRCDIR = src
 SOURCES = $(wildcard $(SRCDIR)/*.c)
