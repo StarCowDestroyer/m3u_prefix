@@ -35,12 +35,14 @@ int get_m3u_files(char *m3u_path, char ***m3u_files_out, int *size_out) {
       exit(1);
     }
 
-    m3u_files[count] = strdup(entry->d_name);
-    if (!m3u_files[count]) {
-      printf("ERROR\n\tstrdup failed\n");
+    // m3u_files[count] = strdup(entry->d_name);
+    m3u_files[count] = (char *)malloc(strlen(entry->d_name) + 1);
+    if (m3u_files[count] == NULL) {
+      printf("ERROR\n\tm3u_files[] allocation failed\n");
       closedir(m3u_dir);
       exit(1);
     }
+    strcpy(m3u_files[count], entry->d_name);
 
     count++;
   }

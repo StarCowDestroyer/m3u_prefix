@@ -1,17 +1,42 @@
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "../include/replaceprefix.h"
-#include "../include/stringutils.h"
+// #include "../include/stringutils.h"
 
 #define BUFFER_REALLOC_SIZE 256
+
+char *build_file_path(char *dir_path, char *file_name) {
+  size_t dir_len = strlen(dir_path);
+  size_t file_len = strlen(file_name);
+  int needs_slash = 0;
+  if (dir_path[dir_len - 1] != '/') {
+    needs_slash = 1;
+    strcat(dir_path, "/");
+  }
+  char *path_to_file = (char *)malloc(dir_len + needs_slash + file_len + 1);
+  if (path_to_file == NULL) {
+    printf("ERROR\nfailed to allocate memory for file path string\n");
+    exit(1);
+  }
+  path_to_file[0] = '\0'; // empty string
+  if (dir_len) {
+    strcat(path_to_file, dir_path);
+  }
+  if (file_len) {
+    strcat(path_to_file, file_name);
+  }
+
+  return path_to_file;
+}
 
 // replaces prefixes in only one m3u file
 int replace_prefix(char *m3u_dir, char *m3u_file, char *replace_str) {
   FILE *m3u_f;
-  char *path_to_file = NULL;
-  path_to_file = strcat(strcat(path_to_file, m3u_dir), m3u_file);
+
+  char *path_to_file = build_file_path(m3u_dir, m3u_file);
   m3u_f = fopen(path_to_file, "r");
   if (m3u_f == NULL) {
     printf("ERROR\nIn replace_prefix.\nFailed to open %s\n.", m3u_file);
@@ -19,15 +44,20 @@ int replace_prefix(char *m3u_dir, char *m3u_file, char *replace_str) {
 
   // apri file in lettura, copia tutto in una stringa, usa stringutils per
   // sostituire apri lo stesso file in scrittura e copia la stringa modificata
-  char *file_str = NULL;
-  char *buf = NULL;
-  buf = (char *)malloc(BUFFER_REALLOC_SIZE);
-  while (fgets(buf, BUFFER_REALLOC_SIZE - 1, m3u_f)) {
-    strcat(file_str, buf);
+
+  char *file_str = (char *)malloc(BUFFER_REALLOC_SIZE);
+  file_str[0] = '\0';
+  char buffer[BUFFER_REALLOC_SIZE];
+  int count = 1;
+  while (fgets(buffer, BUFFER_REALLOC_SIZE - 1, m3u_f)) {
+    file_str = (char *)realloc(file_str, BUFFER_REALLOC_SIZE * count);
+    strcat(file_str, buffer);
     printf("%s\n", file_str);
+    count++;
   }
   printf("%s\n", file_str);
 
+  fclose(m3u_f);
   return 0;
 }
 
