@@ -10,7 +10,8 @@
 // replaces prefixes in only one m3u file
 int replace_prefix(char *m3u_dir, char *m3u_file, char *replace_str) {
   FILE *m3u_f;
-  char *path_to_file = strcat(strcat(path_to_file, m3u_dir), m3u_file);
+  char *path_to_file = NULL;
+  path_to_file = strcat(strcat(path_to_file, m3u_dir), m3u_file);
   m3u_f = fopen(path_to_file, "r");
   if (m3u_f == NULL) {
     printf("ERROR\nIn replace_prefix.\nFailed to open %s\n.", m3u_file);
@@ -23,6 +24,7 @@ int replace_prefix(char *m3u_dir, char *m3u_file, char *replace_str) {
   buf = (char *)malloc(BUFFER_REALLOC_SIZE);
   while (fgets(buf, BUFFER_REALLOC_SIZE - 1, m3u_f)) {
     strcat(file_str, buf);
+    printf("%s\n", file_str);
   }
   printf("%s\n", file_str);
 

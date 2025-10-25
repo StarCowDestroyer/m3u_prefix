@@ -45,9 +45,9 @@ int get_m3u_files(char *m3u_path, char ***m3u_files_out, int *size_out) {
     count++;
   }
 
-  closedir(m3u_dir);
-
   *size_out = count;
   *m3u_files_out = m3u_files;
+  closedir(m3u_dir);
+
   return 1;
 }

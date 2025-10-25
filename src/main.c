@@ -27,12 +27,10 @@ int main(int argc, char *argv[]) {
     return 1;
   }
   printf("M3U FILES:\n");
-  printf("SIZE: %d\n", size);
-  printf("m3u_files[0]: %s\n", m3u_files[0]);
   for (int i = 0; i < size; i++) {
-    printf("I: %d\n", i);
     printf("m3u_files[%d] = %s ", i, m3u_files[i]);
   }
+  printf("CIAO");
   replace_prefix(args.m3u_path, m3u_files[0], "bob");
 
   // replace_text(m3u_files, args.replace_str, args.music_path);
