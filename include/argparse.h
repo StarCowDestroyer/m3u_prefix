@@ -11,5 +11,6 @@ typedef struct {
 } args_t;
 
 args_t parse_args(int argc, char **argv);
-int get_m3u_files(char *m3u_path, char ***m3u_files_out, int *size_out);
+void print_help(char *exec_alias);
+
 #endif

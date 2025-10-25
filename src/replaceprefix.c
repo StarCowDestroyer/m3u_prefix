@@ -1,4 +1,5 @@
 #include "../include/replaceprefix.h"
+#include "../include/stringutils.h"
 #include <stdio.h>
 
 // replaces prefixes in only one m3u file
@@ -11,4 +12,5 @@ int replace_prefix(char *m3u_file, char *replace_str) {
 
   return 0;
 }
+
 int replace_prefixes_all(char **m3u_files, int size, char *replace_str);

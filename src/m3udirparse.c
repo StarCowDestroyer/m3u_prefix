@@ -4,6 +4,7 @@
 
 #include <dirent.h>
 
+#include "../include/argparse.h"
 #include "../include/m3udirparse.h"
 
 int get_m3u_files(char *m3u_path, char ***m3u_files_out, int *size_out) {
@@ -13,6 +14,7 @@ int get_m3u_files(char *m3u_path, char ***m3u_files_out, int *size_out) {
   m3u_dir = opendir(m3u_path);
   if (m3u_dir == NULL) {
     printf("ERROR\n\tCannot open m3u directory\n");
+    print_help(m3u_path);
     exit(1);
   }
 
