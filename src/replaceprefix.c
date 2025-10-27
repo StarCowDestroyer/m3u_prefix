@@ -68,9 +68,7 @@ int replace_prefix(char *m3u_dir, char *m3u_file, char *prefix, char *replace) {
     // sostituire apri lo stesso file in scrittura e copia la stringa modificata
     char *file_str = copym3ufile(m3u_dir, m3u_file);
 
-    while (strreplace(&file_str, prefix, replace) != -1) {
-        continue;
-    }
+    strreplace(&file_str, prefix, replace);
 
     printf("FILE:\n%s", file_str);
 

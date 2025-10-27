@@ -1,5 +1,5 @@
 #include <assert.h>
-#include <stdio.h>
+// #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -21,9 +21,7 @@ int strfind(char *s1, const char *s2, int starting_point) {
 }
 
 /*
- * finds first occurrence of s2 in s1 and
- * replaces s2 in s1 with repl, returns 1
- * if s2 is contained in s1, -1 if not
+ * replaces all occurrences of torepl with repl
  */
 int strreplace(char **file_ptr, const char *torepl, const char *repl) {
     int file_length = strlen(*file_ptr);
@@ -58,6 +56,11 @@ int strreplace(char **file_ptr, const char *torepl, const char *repl) {
         new_file[i] = (*file_ptr)[i2];
         i2++;
     }
+
+    free(*file_ptr);
+    *file_ptr = (char *)malloc(new_file_length);
+    *file_ptr = memcpy(*file_ptr, new_file, new_file_length);
+    free(new_file);
 
     return 1;
 }
