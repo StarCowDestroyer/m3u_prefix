@@ -13,6 +13,6 @@
  * replaces s2 in s1 with repl, returns 1
  * if s2 is contained in s1, 0 if not
  */
-int strreplace(char **s1, const char *s2, const char *repl);
+int strreplace(char **s1, const char *toreplace, const char *repl);
 
 #endif

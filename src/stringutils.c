@@ -9,7 +9,6 @@
  */
 int strfind(const char *s1, const char *s2) {
     int size1 = strlen(s1);
-    int size2 = strlen(s2);
 
     char *find = strstr(s1, s2);
     if (!find) {
@@ -22,10 +21,10 @@ int strfind(const char *s1, const char *s2) {
 /*
  * finds first occurrence of s2 in s1 and
  * replaces s2 in s1 with repl, returns 1
- * if s2 is contained in s1, 0 if not
+ * if s2 is contained in s1, -1 if not
  */
-int strreplace(char **s, const char *torepl, const char *repl) {
-    int file_length = strlen(*s);
+int strreplace(char **file_ptr, const char *torepl, const char *repl) {
+    int file_length = strlen(*file_ptr);
     int torepl_length = strlen(torepl);
     int repl_length = strlen(repl);
 
@@ -35,10 +34,15 @@ int strreplace(char **s, const char *torepl, const char *repl) {
         free(file);
         exit(1);
     }
-    memcpy(file, *s, file_length);
-    free(*s);
+    memcpy(file, *file_ptr, file_length);
 
     int index = strfind(file, torepl);
+    if (index == -1) {
+        free(file);
+        return -1;
+    }
+
+    free(*file_ptr);
 
     // ora devo togliere torepl_length - repl_length caratteri a partire da
     // index
@@ -47,18 +51,23 @@ int strreplace(char **s, const char *torepl, const char *repl) {
     }
     file[file_length - torepl_length] = '\0';
 
-    char *p =
-        (char *)realloc(file, file_length - (torepl_length - repl_length));
+    char *p = (char *)malloc(file_length - (torepl_length - repl_length));
     if (!p) {
-        printf("ERROR\n\tfailed to reallocate memory for file string in "
+        printf("ERROR\n\tfailed to allocate memory for file string in "
                "strreplace\n");
-        free(file);
+        free(p);
         exit(1);
     }
+    memcpy(p, file, file_length - (torepl_length - repl_length));
+    free(file);
     file = p;
 
-    for (int i = 0; file[index + repl_length + i] != '\0'; i++) {
-        file[index + i] = file[index + repl_length + i];
+    char buffer[file_length - (torepl_length - repl_length)];
+    for (int i = 0; file[index + i] != '\0'; i++) {
+        buffer[i] = file[index + i];
+    }
+    for (int i = 0; file[index + i] != '\0'; i++) {
+        file[index + repl_length + i] = buffer[i];
     }
     file[file_length - (torepl_length - repl_length)] = '\0';
     // e aggiungere i repl_length caratteri sempre a partire da index
@@ -67,7 +76,10 @@ int strreplace(char **s, const char *torepl, const char *repl) {
         file[index + i] = repl[i];
     }
 
-    *s = file;
+    *file_ptr = (char *)malloc(file_length - (torepl_length - repl_length));
+    *file_ptr =
+        memcpy(*file_ptr, file, file_length - (torepl_length - repl_length));
+    free(file);
 
     return 1;
 }

@@ -4,7 +4,7 @@
 #include <string.h>
 
 #include "../include/replaceprefix.h"
-// #include "../include/stringutils.h"
+#include "../include/stringutils.h"
 
 #define BUFFER_REALLOC_SIZE 256
 
@@ -63,14 +63,25 @@ char *copym3ufile(char *m3u_dir, char *m3u_file) {
 }
 
 // replaces prefixes in only one m3u file
-int replace_prefix(char *m3u_dir, char *m3u_file, char *replace_str) {
+int replace_prefix(char *m3u_dir, char *m3u_file, char *prefix, char *replace) {
     // apri file in lettura, copia tutto in una stringa, usa stringutils per
     // sostituire apri lo stesso file in scrittura e copia la stringa modificata
-
     char *file_str = copym3ufile(m3u_dir, m3u_file);
-    printf("%s\n", file_str);
+
+    while (strreplace(&file_str, prefix, replace) != -1) {
+        continue;
+    }
+
+    printf("FILE:\n%s", file_str);
 
     return 0;
 }
 
-int replace_prefixes_all(char **m3u_files, int size, char *replace_str);
+int replace_prefixes_all(char **m3u_files, int size, char *m3u_dir,
+                         char *prefix, char *replace) {
+    for (int i = 0; i < size; i++) {
+        replace_prefix(m3u_dir, m3u_files[i], prefix, replace);
+    }
+
+    return 1;
+}

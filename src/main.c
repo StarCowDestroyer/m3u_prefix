@@ -6,24 +6,25 @@
 #include "../include/replaceprefix.h"
 
 int main(int argc, char *argv[]) {
-  args_t args = parse_args(argc, argv);
-  char **m3u_files = NULL;
-  int size;
+    args_t args = parse_args(argc, argv);
+    char **m3u_files = NULL;
+    int size;
 
-  if (!get_m3u_files(args.m3u_path, &m3u_files, &size)) {
-    printf("ERROR\nfailed to read m3u files\n");
-    return 1;
-  }
+    if (!get_m3u_files(args.m3u_path, &m3u_files, &size)) {
+        printf("ERROR\nfailed to read m3u files\n");
+        return 1;
+    }
 
-  printf("M3U FILES:\n");
-  for (int i = 0; i < size; i++) {
-    printf("m3u_files[%d] = %s ", i, m3u_files[i]);
-  }
-  printf("\n");
+    printf("M3U FILES:\n");
+    for (int i = 0; i < size; i++) {
+        printf("m3u_files[%d] = %s\n", i, m3u_files[i]);
+    }
+    printf("\n");
 
-  replace_prefix(args.m3u_path, m3u_files[0], "bob");
+    replace_prefixes_all(m3u_files, size, args.m3u_path, args.replace_str,
+                         args.music_path);
 
-  // replace_text(m3u_files, args.replace_str, args.music_path);
-  // free_m3u_files(&m3u_files);
-  return 0;
+    // replace_text(m3u_files, args.replace_str, args.music_path);
+    // free_m3u_files(&m3u_files);
+    return 0;
 }
