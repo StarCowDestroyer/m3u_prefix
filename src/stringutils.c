@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,10 +8,11 @@
  * returns index of s1 where s2 starts.
  * returns -1 if s2 is not contained in s1.
  */
-int strfind(const char *s1, const char *s2) {
+int strfind(char *s1, const char *s2, int starting_point) {
     int size1 = strlen(s1);
+    char *start = s1 + starting_point;
 
-    char *find = strstr(s1, s2);
+    char *find = strstr(start, s2);
     if (!find) {
         return -1;
     } else {
@@ -28,58 +30,34 @@ int strreplace(char **file_ptr, const char *torepl, const char *repl) {
     int torepl_length = strlen(torepl);
     int repl_length = strlen(repl);
 
-    char *file = malloc(file_length);
-    if (!file) {
-        printf("ERRORE\n\tfailed to allocate memory in strreplace\n");
-        free(file);
-        exit(1);
-    }
-    memcpy(file, *file_ptr, file_length);
+    int indexes[file_length / torepl_length];
+    int i = 0;
 
-    int index = strfind(file, torepl);
-    if (index == -1) {
-        free(file);
-        return -1;
+    indexes[i] = strfind(*file_ptr, torepl, torepl_length);
+    while (indexes[i] != -1) {
+        i++;
+        indexes[i] = strfind(*file_ptr, torepl, indexes[i - 1] + torepl_length);
     }
+    // now we have to replace #i words
+    int new_file_length = file_length - i * (torepl_length - repl_length);
+    char *new_file = (char *)malloc(new_file_length);
+    assert(new_file);
 
-    free(*file_ptr);
-
-    // ora devo togliere torepl_length - repl_length caratteri a partire da
-    // index
-    for (int i = 0; file[index + torepl_length + i] != '\0'; i++) {
-        file[index + i] = file[index + torepl_length + i];
+    int count = 0;
+    int i2 = 0;
+    for (int i = 0; i < new_file_length; i++) {
+        if (indexes[count] == i) {
+            // inserisci repl
+            for (int j = 0; j < repl_length; j++) {
+                new_file[j] = repl[j];
+            }
+            count++;
+            i += repl_length;
+            i2 += torepl_length;
+        }
+        new_file[i] = (*file_ptr)[i2];
+        i2++;
     }
-    file[file_length - torepl_length] = '\0';
-
-    char *p = (char *)malloc(file_length - (torepl_length - repl_length));
-    if (!p) {
-        printf("ERROR\n\tfailed to allocate memory for file string in "
-               "strreplace\n");
-        free(p);
-        exit(1);
-    }
-    memcpy(p, file, file_length - (torepl_length - repl_length));
-    free(file);
-    file = p;
-
-    char buffer[file_length - (torepl_length - repl_length)];
-    for (int i = 0; file[index + i] != '\0'; i++) {
-        buffer[i] = file[index + i];
-    }
-    for (int i = 0; file[index + i] != '\0'; i++) {
-        file[index + repl_length + i] = buffer[i];
-    }
-    file[file_length - (torepl_length - repl_length)] = '\0';
-    // e aggiungere i repl_length caratteri sempre a partire da index
-
-    for (int i = 0; i < repl_length; i++) {
-        file[index + i] = repl[i];
-    }
-
-    *file_ptr = (char *)malloc(file_length - (torepl_length - repl_length));
-    *file_ptr =
-        memcpy(*file_ptr, file, file_length - (torepl_length - repl_length));
-    free(file);
 
     return 1;
 }
