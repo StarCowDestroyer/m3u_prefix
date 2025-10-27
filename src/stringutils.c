@@ -1,5 +1,5 @@
 #include <assert.h>
-// #include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -40,20 +40,26 @@ int strreplace(char **file_ptr, const char *torepl, const char *repl) {
     int new_file_length = file_length - i * (torepl_length - repl_length);
     char *new_file = (char *)malloc(new_file_length);
     assert(new_file);
+    new_file[0] = '\0';
 
     int count = 0;
     int i2 = 0;
-    for (int i = 0; i < new_file_length; i++) {
+    i = 0;
+    while (i < new_file_length) {
         if (indexes[count] == i) {
             // inserisci repl
             for (int j = 0; j < repl_length; j++) {
-                new_file[j] = repl[j];
+                new_file[j + i] = repl[j];
             }
+            indexes[count + 1] += -(count + 1) * (torepl_length - repl_length);
             count++;
             i += repl_length;
             i2 += torepl_length;
+            new_file[i] = '\0';
         }
         new_file[i] = (*file_ptr)[i2];
+        new_file[i + 1] = '\0';
+        i++;
         i2++;
     }
 
