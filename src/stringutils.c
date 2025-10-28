@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -30,16 +31,16 @@ int strreplace(char **file_ptr, const char *torepl, const char *repl) {
     int indexes[file_length / torepl_length];
     int i = 0;
 
-    indexes[i] = strfind(*file_ptr, torepl, torepl_length);
+    indexes[i] = strfind(*file_ptr, torepl, 0);
     while (indexes[i] != -1) {
         i++;
         indexes[i] = strfind(*file_ptr, torepl, indexes[i - 1] + torepl_length);
+        printf("indexes[%d] %d\n", i, indexes[i]);
     }
     // now we have to replace #i words
-    int new_file_length = file_length - i * (torepl_length - repl_length);
+    int new_file_length = file_length - (i * (torepl_length - repl_length));
     char *new_file = (char *)malloc(new_file_length);
     assert(new_file);
-    new_file[0] = '\0';
 
     int count = 0;
     int i2 = 0;
@@ -63,9 +64,8 @@ int strreplace(char **file_ptr, const char *torepl, const char *repl) {
     }
 
     free(*file_ptr);
-    *file_ptr = (char *)malloc(new_file_length);
-    *file_ptr = memcpy(*file_ptr, new_file, new_file_length);
-    free(new_file);
+    *file_ptr = new_file;
+    (*file_ptr)[new_file_length] = '\0';
 
     return 1;
 }

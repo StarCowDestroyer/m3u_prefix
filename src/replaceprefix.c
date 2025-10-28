@@ -67,10 +67,18 @@ int replace_prefix(char *m3u_dir, char *m3u_file, char *prefix, char *replace) {
     // apri file in lettura, copia tutto in una stringa, usa stringutils per
     // sostituire apri lo stesso file in scrittura e copia la stringa modificata
     char *file_str = copym3ufile(m3u_dir, m3u_file);
+    printf("COPIATO\n");
+    printf("FILE:\n%s\n", file_str);
 
     strreplace(&file_str, prefix, replace);
+    printf("RIMPIAZZATO\n");
+
+    // char *file_path = build_file_path(m3u_dir, m3u_file);
+    // FILE *m3u_f = fopen(file_path, "w");
+    // fprintf(m3u_f, file_str);
 
     printf("FILE:\n%s", file_str);
+    free(file_str);
 
     return 0;
 }
@@ -79,6 +87,7 @@ int replace_prefixes_all(char **m3u_files, int size, char *m3u_dir,
                          char *prefix, char *replace) {
     for (int i = 0; i < size; i++) {
         replace_prefix(m3u_dir, m3u_files[i], prefix, replace);
+        printf("FILE %d:\n%s\n\n", i, m3u_files[i]);
     }
 
     return 1;

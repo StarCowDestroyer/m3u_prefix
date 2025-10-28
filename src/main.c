@@ -15,12 +15,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    printf("M3U FILES:\n");
-    for (int i = 0; i < size; i++) {
-        printf("m3u_files[%d] = %s\n", i, m3u_files[i]);
-    }
-    printf("\n");
-
     replace_prefixes_all(m3u_files, size, args.m3u_path, args.replace_str,
                          args.music_path);
 
